@@ -1,5 +1,5 @@
 1. Before run this script docker, kubectl and kind command should avialble on your local machine. To install these command please follow the below link.
-
+https://vineetcic.medium.com/set-up-local-kubernetes-cluster-with-kind-single-node-as-well-as-multi-node-6eb3573a5132
 Save the script and make it executable and run it local machine.
 2. This script will take mode the 5 minutes to set up a cluster.
 3. You can view the docker container running through the dokcer ps command : $ docker ps
