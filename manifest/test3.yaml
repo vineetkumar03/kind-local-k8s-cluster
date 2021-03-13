@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test3
+  labels:
+    app: test3
+  namespace: default  # namespace  on kubernetes server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test3  # Service Name deploy in kubernetes
+
+  # Pod template
+  template:
+    metadata:
+      labels:
+        app: test3
+    spec:
+      containers:
+        - name: test3
+          image: nginx # pull image from public or private registry server 
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+---
+# Service which Deployed in Kubernetes Cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: test3
+  labels:
+    app: test3
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+      app: test3
+
+---
+# Create ingress-lb service 
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-lb
+  labels:
+    app: test3
+  namespace: default
+spec:
+  rules:
+  - host: test.cluster.in   # Host name of the service. 
+    http:
+      paths:
+      - backend:
+          serviceName: test3 
+          servicePort: 80  # Port name where LB service will launch 
+        path: /    # Path where index file will resides
+
